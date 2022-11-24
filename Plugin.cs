@@ -1,8 +1,10 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using UnityEngine;
 
 namespace NoBuildDust
 {
@@ -14,51 +16,31 @@ namespace NoBuildDust
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
-        private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
-
-        internal static string ConnectionError = "";
 
         private readonly Harmony _harmony = new(ModGUID);
 
         public static readonly ManualLogSource NoBuildDustLogger =
             BepInEx.Logging.Logger.CreateLogSource(ModName);
-        
 
         public void Awake()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             _harmony.PatchAll(assembly);
-            SetupWatcher();
         }
+    }
 
-        private void OnDestroy()
+    [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
+    static class ZNetSceneAwakePatch
+    {
+        static void Postfix(ZNetScene __instance)
         {
-            Config.Save();
-        }
-
-        private void SetupWatcher()
-        {
-            FileSystemWatcher watcher = new(Paths.ConfigPath, ConfigFileName);
-            watcher.Changed += ReadConfigValues;
-            watcher.Created += ReadConfigValues;
-            watcher.Renamed += ReadConfigValues;
-            watcher.IncludeSubdirectories = true;
-            watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
-            watcher.EnableRaisingEvents = true;
-        }
-
-        private void ReadConfigValues(object sender, FileSystemEventArgs e)
-        {
-            if (!File.Exists(ConfigFileFullPath)) return;
-            try
+            NoBuildDustPlugin.NoBuildDustLogger.LogDebug("ZNetScene Awake Postfix, turning off build dust");
+            foreach (GameObject instanceMPrefab in __instance.m_prefabs.Where(instanceMPrefab =>
+                         instanceMPrefab.GetComponent<Piece>()))
             {
-                NoBuildDustLogger.LogDebug("ReadConfigValues called");
-                Config.Reload();
-            }
-            catch
-            {
-                NoBuildDustLogger.LogError($"There was an issue loading your {ConfigFileName}");
-                NoBuildDustLogger.LogError("Please check your config entries for spelling and format!");
+                Piece? pieceComponent = instanceMPrefab.GetComponent<Piece>();
+                pieceComponent.m_placeEffect.m_effectPrefabs = pieceComponent.m_placeEffect.m_effectPrefabs
+                    .Where(effect => !effect.m_prefab.name.Contains("vfx")).ToArray();
             }
         }
     }
