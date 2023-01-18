@@ -19,6 +19,14 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 <a href="https://discord.gg/pdHgy6Bsng"><img src="https://i.imgur.com/Xlcbmm9.png" href="https://discord.gg/pdHgy6Bsng" width="175" height="175"></a>
 ***
 
-> # Update Information (Latest listed first)
-> ### v1.0.0
-> - Initial Release
+<details>
+<summary><b>Change Log</b></summary>
+
+## Latest listed first
+
+| `Version` | `Changes`                                                                           |
+|-----------|-------------------------------------------------------------------------------------|
+| 1.0.1     | - _Fixed a bug caused by Epic Loot's Enchanting Table. (Thanks ALo for the report)_ |
+| 1.0.0     | - _Initial Release_                                                                 |
+
+</details>
