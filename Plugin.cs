@@ -12,7 +12,7 @@ namespace NoBuildDust
     public class NoBuildDustPlugin : BaseUnityPlugin
     {
         internal const string ModName = "NoBuildDust";
-        internal const string ModVersion = "1.0.1";
+        internal const string ModVersion = "1.0.2";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
 
@@ -36,19 +36,40 @@ namespace NoBuildDust
             NoBuildDustPlugin.NoBuildDustLogger.LogDebug("ZNetScene Awake Postfix, turning off build dust");
             foreach (GameObject instanceMPrefab in __instance.m_prefabs)
             {
-                instanceMPrefab.TryGetComponent<Piece>(out Piece? piece);
-                if (piece == null) continue;
-                try
+                instanceMPrefab.TryGetComponent(out Piece? piece);
+                instanceMPrefab.TryGetComponent(out WearNTear? wearNTear);
+                if (piece != null)
                 {
-                    if (piece.m_placeEffect.m_effectPrefabs.Length > 0)
+                    try
                     {
-                        piece.m_placeEffect.m_effectPrefabs = piece.m_placeEffect.m_effectPrefabs
-                            .Where(effect => !effect.m_prefab.name.Contains("vfx")).ToArray();
+                        if (piece.m_placeEffect.m_effectPrefabs.Length > 0)
+                        {
+                            piece.m_placeEffect.m_effectPrefabs = piece.m_placeEffect.m_effectPrefabs
+                                .Where(effect => !effect.m_prefab.name.Contains("vfx")).ToArray();
+                        }
+                    }
+                    catch
+                    {
+                        NoBuildDustPlugin.NoBuildDustLogger.LogWarning(
+                            $"Couldn't replace the placement effects for: {Localization.instance.Localize(piece.m_name)} [{piece.name}]");
                     }
                 }
-                catch
+
+                if (wearNTear != null)
                 {
-                    NoBuildDustPlugin.NoBuildDustLogger.LogWarning($"Couldn't replace the placement effects for: {Localization.instance.Localize(piece.m_name)} [{piece.name}]");
+                    try
+                    {
+                        if (wearNTear.m_destroyedEffect.m_effectPrefabs.Length > 0)
+                        {
+                            wearNTear.m_destroyedEffect.m_effectPrefabs = wearNTear.m_destroyedEffect.m_effectPrefabs
+                                .Where(effect => !effect.m_prefab.name.Contains("vfx")).ToArray();
+                        }
+                    }
+                    catch
+                    {
+                        NoBuildDustPlugin.NoBuildDustLogger.LogWarning(
+                            $"Couldn't replace the destruction effects for: {Utils.GetPrefabName(wearNTear.transform.root.gameObject)}");
+                    }
                 }
             }
 

@@ -26,6 +26,7 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 | `Version` | `Changes`                                                                           |
 |-----------|-------------------------------------------------------------------------------------|
+| 1.0.2     | - _Remove the WearNTear destruction effects as well_                                |
 | 1.0.1     | - _Fixed a bug caused by Epic Loot's Enchanting Table. (Thanks ALo for the report)_ |
 | 1.0.0     | - _Initial Release_                                                                 |
 
