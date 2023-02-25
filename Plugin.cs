@@ -12,7 +12,7 @@ namespace NoBuildDust
     public class NoBuildDustPlugin : BaseUnityPlugin
     {
         internal const string ModName = "NoBuildDust";
-        internal const string ModVersion = "1.0.2";
+        internal const string ModVersion = "1.0.3";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
 
@@ -31,6 +31,7 @@ namespace NoBuildDust
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
     static class ZNetSceneAwakePatch
     {
+        [HarmonyPriority(Priority.Last)]
         static void Postfix(ZNetScene __instance)
         {
             NoBuildDustPlugin.NoBuildDustLogger.LogDebug("ZNetScene Awake Postfix, turning off build dust");
