@@ -12,7 +12,7 @@ namespace NoBuildDust
     public class NoBuildDustPlugin : BaseUnityPlugin
     {
         internal const string ModName = "NoBuildDust";
-        internal const string ModVersion = "1.0.3";
+        internal const string ModVersion = "1.0.4";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
 
