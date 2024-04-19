@@ -1,5 +1,6 @@
 | `Version` | `Changes`                                                                           |
 |-----------|-------------------------------------------------------------------------------------|
+| 1.0.5     | - _Update for Valheim 0.217.46_                                                     |
 | 1.0.4     | - _Update for Valheim 0.217.22_                                                     |
 | 1.0.3     | - Run the fix last, hopefully making it compatible with more mods                   |
 | 1.0.2     | - _Remove the WearNTear destruction effects as well_                                |
